@@ -1,0 +1,51 @@
+{
+  "name":        "dreamfactory/df-databricks",
+  "description": "DreamFactory(tm) Databricks Code",
+  "homepage":    "https://www.dreamfactory.com/",
+  "keywords":    [
+    "dreamfactory",
+    "databricks",
+    "connector"
+  ],
+  "license":     [
+    "Apache-2.0"
+  ],
+  "authors":     [
+    {
+      "name":  "DreamFactory Developers",
+      "email": "code@dreamfactory.com"
+    }
+  ],
+  "support":     {
+    "email":  "dspsupport@dreamfactory.com",
+    "source": "https://github.com/dreamfactorysoftware/df-databricks",
+    "issues": "https://github.com/dreamfactorysoftware/df-databricks/issues",
+    "wiki":   "https://wiki.dreamfactory.com"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "require":     {
+    "dreamfactory/df-core":   "~0.25",
+    "dreamfactory/df-system": "~0.5",
+    "ext-curl": "*",
+    "ext-json": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "@stable"
+  },
+  "autoload":    {
+    "psr-4": {
+      "DreamFactory\\Core\\Databricks\\": "src/"
+    }
+  },
+  "extra":       {
+    "branch-alias": {
+      "dev-develop": "0.1.x-dev"
+    },
+    "laravel": {
+      "providers": [
+        "DreamFactory\\Core\\Databricks\\ServiceProvider"
+      ]
+    }
+  }
+}
