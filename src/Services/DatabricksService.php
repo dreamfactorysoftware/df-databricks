@@ -5,52 +5,74 @@ use DreamFactory\Core\Exceptions\InternalServerErrorException;
 use DreamFactory\Core\Exceptions\BadRequestException;
 use DreamFactory\Core\Exceptions\RestException;
 use DreamFactory\Core\Models\Service;
-use DreamFactory\Core\Services\BaseRestService;
-use DreamFactory\Core\Databricks\Components\ExampleComponent;
 use DreamFactory\Core\Databricks\Models\DatabricksConfig;
-use DreamFactory\Core\Databricks\Resources\ExampleResource;
 use DreamFactory\Core\Utility\Session;
 use DreamFactory\Core\Enums\Verbs;
+use DreamFactory\Core\SqlDb\Services\SqlDb;
 
-class DatabricksService extends BaseRestService
+class DatabricksService extends SqlDb
 {
-    /**
-     * @var \DreamFactory\Core\Databricks\Models\DatabricksConfig
-     */
-    protected $exampleModel = null;
-
-
-    //*************************************************************************
-    //* Methods
-    //*************************************************************************
-
-    /**
-     * Create a new DatabricksService
-     *
-     * Create your methods, properties or override ones from the parent
-     *
-     * @param array $settings settings array
-     *
-     * @throws \InvalidArgumentException
-     */
-    public function __construct($settings)
+    public function __construct($settings = [])
     {
-        $this->exampleModel = new DatabricksConfig();
         parent::__construct($settings);
+
+        $prefix = parent::getConfigBasedCachePrefix();
+        $this->setConfigBasedCachePrefix($prefix);
     }
 
-    /**
-     * Fetches example.
-     *
-     * @return array
-     * @throws UnauthorizedException
-     */
-    protected function handleGET()
+    public static function adaptConfig(array &$config)
     {
-        $databricks = new DatabricksComponent($this->config);
+        $config['driver'] = 'databricks';
+        parent::adaptConfig($config);
+    }
 
-        $content = $databricks->get('/clusters/get');
+    public function getApiDocInfo()
+    {
+        $base = parent::getApiDocInfo();
+//        $paths = (array)Arr::get($base, 'paths');
+//        foreach ($paths as $pkey => $path) {
+//            foreach ($path as $rkey => $resource) {
+//                if ($rkey === 'patch' || $rkey === 'put') {
+//                    unset($paths[$pkey][$rkey]);
+//                    continue;
+//                }
+//            }
+//        }
+//        foreach ($paths as $pkey => $path) {
+//            if ($pkey !== '/' && isset($path['get']) && isset($path['get']['parameters'])) {
+//                $newParams = [
+//                    $this->getHeaderPram('hostname'),
+//                    $this->getHeaderPram('account'),
+//                    $this->getHeaderPram('username'),
+//                    $this->getHeaderPram('password'),
+//                    $this->getHeaderPram('role'),
+//                    $this->getHeaderPram('database'),
+//                    $this->getHeaderPram('warehouse'),
+//                    $this->getHeaderPram('schema')
+//                ];
+//                $paths[$pkey]['get']['parameters'] = array_merge($paths[$pkey]['get']['parameters'], $newParams);
+//            }
+//        }
+//        $base['paths'] = $paths;
 
-        return $content;
+        return $base;
+    }
+
+    public static function getDriverName()
+    {
+        return 'databricks';
+    }
+
+    private function getHeaderPram($name): array
+    {
+        return [
+            "name" => $name,
+            "description" => ucfirst($name) . " for database connection.",
+            "schema" => [
+                "type" => "string"
+            ],
+            "in" => "header",
+            "required" => false
+        ];
     }
 }

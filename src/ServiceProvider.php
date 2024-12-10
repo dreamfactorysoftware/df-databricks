@@ -1,6 +1,8 @@
 <?php
 namespace DreamFactory\Core\Databricks;
 
+use DreamFactory\Core\Databricks\Database\Connectors\DatabricksConnector;
+use DreamFactory\Core\Databricks\Database\Schema\DatabricksSchema;
 use DreamFactory\Core\Databricks\Models\DatabricksConfig;
 use DreamFactory\Core\Services\ServiceManager;
 use DreamFactory\Core\Services\ServiceType;
@@ -22,13 +24,28 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 
     public function register()
     {
+        $this->app->resolving('df.db.schema', function (DbSchemaExtensions $db){
+            $db->extend('databricks', function ($connection){
+                return new DatabricksSchema($connection);
+            });
+        });
+
+        $this->app->resolving('db', function (DatabaseManager $db){
+            $db->extend('databricks', function ($config){
+                $connector = new DatabricksConnector();
+                $connection = $connector->connect($config);
+
+                return new DatabricksConnection($connection, $config['database'], '', $config);
+            });
+        });
+
         $this->app->resolving('df.service', function (ServiceManager $df) {
             $df->addType(
                 new ServiceType([
                     'name'            => 'databricks',
                     'label'           => 'DatabricksService Service',
                     'description'     => 'Service for DatabricksService connections.',
-                    'group'           => ServiceTypeGroups::REMOTE,
+                    'group'           => ServiceTypeGroups::DATABASE,
                     'config_handler'  => DatabricksConfig::class,
                     'factory'         => function ($config) {
                         return new DatabricksService($config);

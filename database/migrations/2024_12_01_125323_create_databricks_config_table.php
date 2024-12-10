@@ -28,6 +28,7 @@ class CreateExampleTable extends Migration
                 $t->integer('service_id')->unsigned();
                 $t->foreign('service_id')->references('id')->on('service')->onDelete('cascade');
                 $t->string('host');
+                $t->string('http_path');
                 $t->string('token');
             }
         );

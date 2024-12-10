@@ -63,6 +63,13 @@ class DatabricksConfig extends BaseServiceConfigModel
                 $schema['description'] =
                     'Your Databricks API Token';
                 break;
+            case 'http_path':
+                $schema['label'] = 'Databricks HTTP Path';
+                $schema['type'] = 'text';
+                $schema['required'] = true;
+                $schema['description'] =
+                    'Your Databricks API Token';
+                break;
         }
     }
 
