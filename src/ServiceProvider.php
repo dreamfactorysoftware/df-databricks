@@ -10,6 +10,7 @@ use DreamFactory\Core\Enums\ServiceTypeGroups;
 use DreamFactory\Core\Enums\LicenseLevel;
 use DreamFactory\Core\Databricks\Services\DatabricksService;
 use Illuminate\Routing\Router;
+use Illuminate\Database\DatabaseManager;
 
 use Route;
 use Event;

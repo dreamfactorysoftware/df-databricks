@@ -25,8 +25,7 @@
   "minimum-stability": "dev",
   "prefer-stable": true,
   "require":     {
-    "dreamfactory/df-core":   "~0.25",
-    "dreamfactory/df-system": "~0.5",
+    "dreamfactory/df-sqldb": "~1.0",
     "ext-pdo": "*"
   },
   "require-dev": {

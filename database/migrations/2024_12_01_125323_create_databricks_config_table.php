@@ -4,7 +4,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
-class CreateExampleTable extends Migration
+class CreateDatabricksConfigTable extends Migration
 {
     /**
      * Run the migrations. To create example database table.
