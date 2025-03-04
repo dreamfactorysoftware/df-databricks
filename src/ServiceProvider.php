@@ -1,6 +1,7 @@
 <?php
 namespace DreamFactory\Core\Databricks;
 
+use DreamFactory\Core\Components\DbSchemaExtensions;
 use DreamFactory\Core\Databricks\Database\Connectors\DatabricksConnector;
 use DreamFactory\Core\Databricks\Database\Schema\DatabricksSchema;
 use DreamFactory\Core\Databricks\Models\DatabricksConfig;
@@ -47,6 +48,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
                     'label'           => 'DatabricksService Service',
                     'description'     => 'Service for DatabricksService connections.',
                     'group'           => ServiceTypeGroups::DATABASE,
+                    'subscription_required' => LicenseLevel::SILVER,
                     'config_handler'  => DatabricksConfig::class,
                     'factory'         => function ($config) {
                         return new DatabricksService($config);

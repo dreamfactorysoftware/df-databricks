@@ -30,6 +30,7 @@ class CreateDatabricksConfigTable extends Migration
                 $t->string('host');
                 $t->string('http_path');
                 $t->string('token');
+                $t->string('driver_path');
             }
         );
     }

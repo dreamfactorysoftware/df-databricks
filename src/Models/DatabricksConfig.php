@@ -22,6 +22,8 @@ class DatabricksConfig extends BaseServiceConfigModel
         'description',
         'host',
         'token',
+        'http_path',
+        'driver_path',
     ];
 
     /** @var array */
@@ -68,7 +70,14 @@ class DatabricksConfig extends BaseServiceConfigModel
                 $schema['type'] = 'text';
                 $schema['required'] = true;
                 $schema['description'] =
-                    'Your Databricks API Token';
+                    'Your Databricks HTTP Path';
+                break;
+            case 'driver_path':
+                $schema['label'] = 'Databricks ODBC Driver Path';
+                $schema['type'] = 'text';
+                $schema['required'] = true;
+                $schema['description'] =
+                    'Your ODBC Driver Path';
                 break;
         }
     }
