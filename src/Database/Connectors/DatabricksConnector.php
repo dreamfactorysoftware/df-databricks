@@ -92,7 +92,13 @@ class DatabricksConnector extends Connector implements ConnectorInterface
                 'http_path' => $config['options']['http_path'] ?? 'not set',
                 'odbc_config' => shell_exec('cat /etc/odbcinst.ini'),
                 'registered_drivers' => shell_exec('odbcinst -q -d'),
-                'driver_dependencies' => shell_exec('ldd ' . ($config['options']['driver_path'] ?? '/opt/databricks/lib64/libsparkodbc_sb64.so'))
+                // escapeshellarg the admin-supplied driver_path. Without
+                // this, a config value like "/tmp/x; rm -rf /; #.so" passes
+                // through unchanged and the shell_exec runs the injected
+                // command. Defense-in-depth even though this is in a
+                // debug-log block — admin-config-as-code-execution is a
+                // low bar for an account-takeover pivot.
+                'driver_dependencies' => shell_exec('ldd ' . escapeshellarg($config['options']['driver_path'] ?? '/opt/databricks/lib64/libsparkodbc_sb64.so'))
             ]);
 
             // Check if driver file exists
