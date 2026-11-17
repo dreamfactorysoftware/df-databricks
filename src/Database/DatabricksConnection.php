@@ -99,13 +99,18 @@ class DatabricksConnection extends Connection
     }
 
     /**
-     * Get the default query grammar instance
+     * Get the default query grammar instance.
+     *
+     * Laravel 13's base Grammar requires a Connection in its constructor; the
+     * pre-L13 `withTablePrefix(new Grammar)` two-step is no longer available
+     * (`withTablePrefix()` was removed and the grammar now reads the prefix
+     * directly off the connection).
      *
      * @return Query\Grammars\DatabricksGrammar
      */
     protected function getDefaultQueryGrammar()
     {
-        return new DatabricksGrammar;
+        return new DatabricksGrammar($this);
     }
 
     /**
@@ -121,11 +126,14 @@ class DatabricksConnection extends Connection
     /**
      * Get the default schema grammar instance.
      *
+     * Laravel 13: pass the connection into the grammar constructor instead
+     * of wiring the table prefix via the removed `withTablePrefix()` helper.
+     *
      * @return SchemaGrammar
      */
     protected function getDefaultSchemaGrammar()
     {
-        return $this->withTablePrefix(new SchemaGrammar());
+        return new SchemaGrammar($this);
     }
 
     /**

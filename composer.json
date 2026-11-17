@@ -25,15 +25,26 @@
   "minimum-stability": "dev",
   "prefer-stable": true,
   "require":     {
-    "dreamfactory/df-sqldb": "~1.0",
-    "ext-pdo": "*"
+    "php": "^8.3",
+    "ext-pdo": "*",
+    "laravel/helpers": "^1.8",
+    "dreamfactory/df-sqldb": "~1.1"
   },
   "require-dev": {
-    "phpunit/phpunit": "@stable"
+    "laravel/framework": "^13.7",
+    "mockery/mockery": "^1.6",
+    "nunomaduro/collision": "^8.6",
+    "phpunit/phpunit": "^11.5.3",
+    "orchestra/testbench": "^11.0"
   },
   "autoload":    {
     "psr-4": {
       "DreamFactory\\Core\\Databricks\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "DreamFactory\\Core\\Databricks\\Tests\\": "tests/"
     }
   },
   "extra":       {
