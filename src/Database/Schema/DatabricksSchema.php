@@ -258,8 +258,11 @@ class DatabricksSchema extends SqlSchema
      */
     protected function loadTableColumns(TableSchema $table)
     {
-        $sql = "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '{$table->schemaName}' AND TABLE_NAME = '{$table->name}'";
-        $columns = $this->connection->select($sql);
+        $sql = "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = :schema AND TABLE_NAME = :name";
+        $columns = $this->connection->select($sql, [
+            ':schema' => $table->schemaName,
+            ':name'   => $table->name,
+        ]);
 
         foreach ($columns as $column) {
             $columnSchema = new ColumnSchema();
@@ -285,8 +288,8 @@ class DatabricksSchema extends SqlSchema
      */
     protected function getTableConstraints($schema = '')
     {
-        $sql = "SELECT * FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE TABLE_SCHEMA = '$schema'";
-        return $this->connection->select($sql);
+        $sql = "SELECT * FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE TABLE_SCHEMA = :schema";
+        return $this->connection->select($sql, [':schema' => $schema]);
     }
 
     /**
@@ -350,8 +353,8 @@ class DatabricksSchema extends SqlSchema
      */
     protected function getViewNames($schema = '')
     {
-        $sql = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '$schema' AND TABLE_TYPE = 'VIEW'";
-        return $this->connection->select($sql);
+        $sql = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = :schema AND TABLE_TYPE = 'VIEW'";
+        return $this->connection->select($sql, [':schema' => $schema]);
     }
 
     /**
@@ -359,8 +362,8 @@ class DatabricksSchema extends SqlSchema
      */
     public function getProcedureNames($schema = '')
     {
-        $sql = "SELECT ROUTINE_NAME FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA = '$schema' AND ROUTINE_TYPE = 'PROCEDURE'";
-        return $this->connection->select($sql);
+        $sql = "SELECT ROUTINE_NAME FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA = :schema AND ROUTINE_TYPE = 'PROCEDURE'";
+        return $this->connection->select($sql, [':schema' => $schema]);
     }
 
     /**
@@ -368,8 +371,8 @@ class DatabricksSchema extends SqlSchema
      */
     public function getFunctionNames($schema = '')
     {
-        $sql = "SELECT ROUTINE_NAME FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA = '$schema' AND ROUTINE_TYPE = 'FUNCTION'";
-        return $this->connection->select($sql);
+        $sql = "SELECT ROUTINE_NAME FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA = :schema AND ROUTINE_TYPE = 'FUNCTION'";
+        return $this->connection->select($sql, [':schema' => $schema]);
     }
 
     /**
@@ -377,8 +380,11 @@ class DatabricksSchema extends SqlSchema
      */
     protected function loadParameters(RoutineSchema $holder)
     {
-        $sql = "SELECT * FROM INFORMATION_SCHEMA.PARAMETERS WHERE SPECIFIC_SCHEMA = '{$holder->schemaName}' AND SPECIFIC_NAME = '{$holder->name}'";
-        $parameters = $this->connection->select($sql);
+        $sql = "SELECT * FROM INFORMATION_SCHEMA.PARAMETERS WHERE SPECIFIC_SCHEMA = :schema AND SPECIFIC_NAME = :name";
+        $parameters = $this->connection->select($sql, [
+            ':schema' => $holder->schemaName,
+            ':name'   => $holder->name,
+        ]);
 
         foreach ($parameters as $parameter) {
             $paramSchema = new ParameterSchema();
